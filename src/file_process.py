@@ -1,7 +1,10 @@
 from collections import defaultdict
 from nltk.corpus import stopwords
 from pprint import pprint
-import re
+import re,logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 stopwords = set(stopwords.words('english'))
 
@@ -38,6 +41,7 @@ def get_most_common_terms (X_tag_freq, s):
     freq_w_tuples = [(v['freq'],k) for k,v in X_tag_freq.iteritems()]
     freq_w_tuples.sort(reverse=True)
     top_n_frew_w_tuples = freq_w_tuples[:s]
+    logger.debug('top frequent terms: {}'.format(top_n_frew_w_tuples))
     return [tup[1] for tup in top_n_frew_w_tuples]
 
 
