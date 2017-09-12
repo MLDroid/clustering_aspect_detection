@@ -4,9 +4,12 @@ from file_process import *
 from pprint import pprint
 from semantic_sim import get_semantic_sim_mat
 from statistical_sim import get_statistical_sim_mat
+from combine_G_T import get_combined_sim_dict
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
 parsed_reviews = []
 
 
@@ -26,10 +29,12 @@ def main ():
     X = cand_aspects + cand_feats
 
     X = X[:10] #just to make quick inferences during development
-    # G = get_semantic_sim_mat (X)
-    # pprint(G)
-    T = get_statistical_sim_mat (X, parsed_reviews, X_tag_freq)
-    # sim_mat = get_sim_mat (G,T)
+    G = get_semantic_sim_mat (X)
+    # pprint (G)
+    # raw_input()
+    T = get_statistical_sim_mat (X, parsed_reviews)
+    comb_sim_dict = get_combined_sim_dict (G,T,X)
+    # pprint(comb_sim_dict)
 
 
 if __name__ == '__main__':

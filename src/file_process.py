@@ -3,7 +3,7 @@ from nltk.corpus import stopwords
 from pprint import pprint
 import re,logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 stopwords = set(stopwords.words('english'))

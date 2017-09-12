@@ -12,6 +12,7 @@ sss_url = "http://swoogle.umbc.edu/SimService/GetSimilarity"
 def get_swoogle_semantic_sim (i,j,
                               s1, s2,
                               type='relation', corpus='webbase'):
+    # return 0
     if i > j:
         return 0
     if i == j:
@@ -25,7 +26,7 @@ def get_swoogle_semantic_sim (i,j,
         else:
             return float(response.text.strip())
     except:
-        print 'Error in getting similarity for %s: %s' % ((s1, s2), response)
+        logger.error('Error in getting similarity for %s and %s' % (s1, s2))
         return 0.0
 
 
@@ -33,12 +34,12 @@ def get_semantic_sim_mat(words):
     G = []
     for i,wi in enumerate(words):
         # Parallel(n_jobs=2)(delayed(sqrt)(i ** 2) for i in range(10))
-        row = Parallel(n_jobs=20)(delayed(get_swoogle_semantic_sim)(i,j,wi,wj)
-                                  for j, wj in enumerate(words))
+        # row = Parallel(n_jobs=20)(delayed(get_swoogle_semantic_sim)(i,j,wi,wj)
+        #                           for j, wj in enumerate(words))
         #
-        # row = []
-        # for j, wj in enumerate(words):
-        #     row.append(sss(i,j,wi,wj))
+        row = []
+        for j, wj in enumerate(words):
+            row.append(get_swoogle_semantic_sim(i,j,wi,wj))
         G.append(row)
     G = np.array(G)
     for i in xrange(G.shape[0]):
