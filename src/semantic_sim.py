@@ -12,7 +12,7 @@ sss_url = "http://swoogle.umbc.edu/SimService/GetSimilarity"
 def get_swoogle_semantic_sim (i,j,
                               s1, s2,
                               type='relation', corpus='webbase'):
-    # return 0
+    return 0
     if i > j:
         return 0
     if i == j:
