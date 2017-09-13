@@ -7,8 +7,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-w_t = 0.2
-w_gt = 0.6
+w_t = 0.5
+w_gt = 0.3
 w_g = 1 - w_t - w_gt
 
 def get_wordpair_similarity(index_i, index_j, G, T):
