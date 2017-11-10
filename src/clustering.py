@@ -23,10 +23,10 @@ def cluster_aspects(existing_clusters, sim_dict, word_tagfreq_dict, delta):
                                             sim_dict,word_tagfreq_dict)
                 cluster_i_dist_map[(i, i+1+j)] = cluster_dist
             if cluster_i_dist_map:
-                index_tup_of_closest_clusters, dict_bw_closest_cluster = \
+                index_tup_of_closest_clusters, dist_bw_closest_cluster = \
                     sorted(cluster_i_dist_map.items(),key=operator.itemgetter(1))[0]
                 del cluster_i_dist_map
-                if dict_bw_closest_cluster < delta:
+                if dist_bw_closest_cluster < delta:
                     phi[index_tup_of_closest_clusters[0]].\
                         extend(phi[index_tup_of_closest_clusters[1]])
                     del phi[index_tup_of_closest_clusters[1]]
@@ -36,34 +36,28 @@ def cluster_aspects(existing_clusters, sim_dict, word_tagfreq_dict, delta):
             else:
                 processed_cluster_flag = True
                 break
-    pprint (phi)
     return phi
 
 
-'''
-def cluster_aspects (asp_words, sim_dict, word_tagfreq_dict, delta):
-    clusters = {asp:[asp] for asp in asp_words}
-    new_clusters = []
-    while True:
-        for i,cluster_center_i in enumerate(clusters.iterkeys()):
-            cluster_i = clusters[cluster_center_i]
-            cluster_i_dist_map = {}
-            for cluster_center_j in clusters.keys()[i+1:]:
-                cluster_j = clusters[cluster_center_j]
-                cluster_dist = get_distance(cluster_i,cluster_j,
-                                            sim_dict,word_tagfreq_dict)
-                cluster_i_dist_map[(cluster_center_i,cluster_center_j)] = cluster_dist
-            if cluster_i_dist_map:
-                cluster_i_dist_map = sorted(cluster_i_dist_map.items(),
-                                            key=operator.itemgetter(1))
-                min_dist_bw_clusters = cluster_i_dist_map.values()[0]
-                potentially_mergable_cluster = cluster_i_dist_map.keys()[0]
-                del cluster_i_dist_map
-                if min_dist_bw_clusters < delta:
-                    mergeable_pair_cluster = potentially_mergable_cluster
 
-                else:
-                    mergeable_pair_cluster = None
+def cluster_features(existing_clusters, candi_features, sim_dict, word_tagfreq_dict, delta):
+    phi = deepcopy(existing_clusters)
+    for word in candi_features:
+        clusters_to_loop_thro = deepcopy(phi)
+        word_dist_map = {}
+        for i,cluster_i in enumerate(clusters_to_loop_thro):
+            cluster_dist = get_distance(cluster_i,[word],
+                                        sim_dict,word_tagfreq_dict)
+            word_dist_map[i] = cluster_dist
+        if word_dist_map:
+            index_of_closest_cluster, dist_of_closest_cluster = \
+                sorted(word_dist_map.items(),key=operator.itemgetter(1))[0]
+            del word_dist_map
+            if dist_of_closest_cluster < delta:
+                phi[index_of_closest_cluster].append(word)
+                break
+            else:
+                continue
+    return phi
 
-'''
 

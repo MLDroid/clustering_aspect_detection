@@ -31,12 +31,16 @@ def break_review_into_sents(parsed_reviews):
     reviews_as_sents = {doc_id:[] for doc_id in xrange(len(parsed_reviews))}
     pos_tags_to_consider = {'NN','NNP','JJ'}
     for doc_id, rev_doc in enumerate(parsed_reviews):
-        doc_as_sents_list = [[] for _ in xrange(rev_doc.count(('eos','eos')))]
+        #doc_as_sents_list = [[] for _ in xrange(rev_doc.count(('eos','eos')))]
+        pos_doc = [tup[1] for tup in rev_doc]
+        doc_as_sents_list = [[] for _ in xrange(pos_doc.count('.')+1)]
         sent_id = 0
         for word,pos in rev_doc:
-            if pos == 'eos':
+            #if pos == 'eos':
+            if pos == '.':
                 sent_id += 1
             elif pos in pos_tags_to_consider:
+                print sent_id
                 doc_as_sents_list[sent_id].append(word)
             else:
                 continue
@@ -83,7 +87,7 @@ def get_statistical_sim_mat (words, parsed_reviews):
             if i < j:
                 fxixj = f_xi_xj.get((wi, wj),0)
                 if 0 == fxixj:
-                    T[i, j] = 0
+                    T[i, j] = -1
                     continue
                 f_wi = f_xi[wi]
                 f_wj = f_xi[wj]
